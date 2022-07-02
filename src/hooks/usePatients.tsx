@@ -9,14 +9,13 @@ const usePatients = () => {
   useEffect(() => {
     async function getAllPatients() {
       try {
-        const jsonServerUrl = 'https://patients-worklist-json-server.herokuapp.com/'
         const requestOptions = {
           method: "GET",
           headers: {
             "Content-Type": "application/json"
           }
         }
-        const response = await fetch(`${jsonServerUrl}patients/`, requestOptions)
+        const response = await fetch(`${process.env.REACT_APP_JSON_SERVER_API_URL}patients/`, requestOptions)
 
         if (!response.ok)
           throw new Error(`This is an HTTP error: The status is ${response.status}`)
@@ -39,14 +38,13 @@ const usePatients = () => {
 
   const removePatient = async (patientId: TPatientId) => {
     try {
-      const jsonServerUrl = 'https://patients-worklist-json-server.herokuapp.com/'
       const requestOptions = {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
         }
       }
-      const response = await fetch(`${jsonServerUrl}patients/${patientId}/`, requestOptions)
+      const response = await fetch(`${process.env.REACT_APP_JSON_SERVER_API_URL}patients/${patientId}/`, requestOptions)
       
       if (response.status !== 200)
         throw new Error(`This is an HTTP error: The status is ${response.status}`)
