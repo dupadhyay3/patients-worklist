@@ -6,13 +6,45 @@
       @apply w-full py-0 px-8 mx-auto items-center flex flex-wrap;
       .navBar {
         @apply relative text-white flex items-center;
-        .logo {
-          @apply w-20 m-1;
-        }
         .siteSwitcher {
-          @apply w-20 m-1;
+          @apply w-full m-1 flex space-x-2 items-center ;
+        }
+        .banner {
+          .bannerTitle {
+            @apply flex items-center;
+            .logo {
+              @apply w-20 m-1;
+            }
+            .navigator {
+              @apply w-80 mx-1;
+            }
+          }
         }
       }
+    }
+  }
+  .mainContainer {
+    @apply container mx-auto;
+    .leftPanel {
+      @apply float-left;
+      .filtersTitle {
+        @apply w-full font-bold text-center text-xl;
+      }
+      .filterBox {
+        @apply w-full my-5;
+        .heading {
+          @apply w-full flex flex-wrap justify-between left-0;
+          .lbl {
+            @apply font-semibold float-left;
+          }
+          .clearFilter {
+            @apply float-right;
+          }
+        }
+      }
+    }
+    .listing {
+      @apply float-right w-3/4;
     }
   }
 }
