@@ -1,3 +1,18 @@
-.App {
+.app {
   @apply text-center;
+  .header {
+    @apply relative w-full z-10 bg-teal-700;
+    .headerContainer {
+      @apply w-full py-0 px-8 mx-auto items-center flex flex-wrap;
+      .navBar {
+        @apply relative text-white flex items-center;
+        .logo {
+          @apply w-20 m-1;
+        }
+        .siteSwitcher {
+          @apply w-20 m-1;
+        }
+      }
+    }
+  }
 }

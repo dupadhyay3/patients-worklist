@@ -1,0 +1,19 @@
+
+.dashboardMain {
+  @apply w-full flex flex-row flex-wrap justify-center;
+  .totalCard {
+    @apply shadow-magical rounded-xl flex-[17.55%_0] p-5 m-5 h-auto;
+    background-color: var(--card-bg-color);
+    @for $i from 0 through 12 {
+      &:nth-child(#{$i}) {
+        --card-bg-color: #{(rgba(random(226), random(245), random(222), 0.3))};
+      }
+    }
+    .lbl {
+      @apply mb-4 uppercase text-sm;
+    }
+    .val {
+      @apply mt-2 text-xl;
+    }
+  }
+}
