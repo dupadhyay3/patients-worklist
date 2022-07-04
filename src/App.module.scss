@@ -26,19 +26,19 @@
   .mainContainer {
     @apply container mx-auto;
     .leftPanel {
-      @apply float-left;
+      @apply float-left w-1/4 max-w-[250px];
       .filtersTitle {
         @apply w-full font-bold text-center text-xl;
       }
       .filterBox {
-        @apply w-full my-5;
+        @apply w-full my-5 text-left;
         .heading {
           @apply w-full flex flex-wrap justify-between left-0;
           .lbl {
-            @apply font-semibold float-left;
+            @apply font-semibold float-left w-3/4;
           }
           .clearFilter {
-            @apply float-right;
+            @apply float-right w-1/4;
           }
         }
       }
