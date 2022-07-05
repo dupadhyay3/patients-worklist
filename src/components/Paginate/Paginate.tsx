@@ -8,7 +8,7 @@ interface IPaginate {
   itemsPerPage: number
 }
 
-const Paginate: FC<IPaginate> = ({data, setData, itemsPerPage}) => {
+const Paginate: FC<IPaginate> = ({ data, setData, itemsPerPage }) => {
   return (
     <div>
       <div className={s.pageNumberContainer}>
