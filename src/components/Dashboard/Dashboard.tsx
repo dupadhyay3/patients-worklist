@@ -15,8 +15,8 @@ const Dashboard: FC<IDashboardProps> = ({ dashboard }) => {
   const TotalCard: FC<IDashboardCard> = ({ lbl, val }) => {
     return (
       <div className={s.totalCard}>
-        <div className={s.lbl}>{lbl}</div>
         <div className={s.val}>{val}</div>
+        <div className={s.lbl}>{lbl}</div>
       </div>
     )
   }

@@ -1,19 +1,22 @@
 
 .dashboardMain {
-  @apply w-full flex flex-row flex-wrap justify-center;
+
+  @apply w-full flex flex-row flex-wrap justify-center mt-5;
   .totalCard {
-    @apply shadow-magical rounded-xl flex-[17.55%_0] p-5 m-5 h-auto;
+    @apply shadow-magical rounded-xl flex-[9%_0] p-2 m-2 h-auto;
     background-color: var(--card-bg-color);
+    box-shadow: 3px 3px 6px 0 var(--card-bg-color);
     @for $i from 0 through 12 {
       &:nth-child(#{$i}) {
         --card-bg-color: #{(rgba(random(226), random(245), random(222), 0.3))};
       }
     }
     .lbl {
-      @apply mb-4 uppercase text-sm;
+      @apply mb-4 uppercase text-xs;
     }
     .val {
-      @apply mt-2 text-xl;
+      @apply mt-2 text-2xl; 
     }
   }
 }
+ 
