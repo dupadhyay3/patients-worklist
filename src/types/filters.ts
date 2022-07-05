@@ -1,4 +1,10 @@
-import { TGender, TVaccinationStatus, TVaccineName, TSite, TSymptoms } from './patient'
+import {
+  TGender,
+  TVaccinationStatus,
+  TVaccineName,
+  TSite,
+  TSymptoms,
+} from './patient'
 
 export interface IFilters {
   gender: TGender | ''

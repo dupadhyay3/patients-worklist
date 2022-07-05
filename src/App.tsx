@@ -1,13 +1,12 @@
 import { FC, useEffect, useState } from 'react'
-import { NavLink, BrowserRouter } from "react-router-dom"
+import { NavLink, BrowserRouter } from 'react-router-dom'
 import cn from 'classnames'
 import usePatients from 'hooks/usePatients'
 import { IDashboard } from 'types/dashboard'
 import { IFilters } from 'types/filters'
-import { IPatient, TSite } from 'types/patient'
+import { IPatient, TPatients, TSite } from 'types/patient'
 import { Dashboard, Listing, ToggleSwitch } from 'components'
 import s from './App.module.scss'
-
 
 const SITE_MUMBAI = 'Mumbai'
 const SITE_BANGLORE = 'Banglore'
@@ -29,6 +28,7 @@ interface IFilterBox {
 const App: FC = () => {
   const [switchToggle, setSwitchToggle] = useState<boolean>(false)
   const [currentSite, setSite] = useState<TSite>(SITE_MUMBAI)
+  const [dataFromPaginate, setDataFromPaginate] = useState<TPatients>([])
 
   const [dashboard, setDashboard] = useState<IDashboard>({
     totalPatients: 0,
@@ -49,23 +49,41 @@ const App: FC = () => {
     vaccinationStatus: '',
     vaccineName: '',
     site: '',
-    symptoms: []
+    symptoms: [],
   })
 
-  const { loading, patients, error, removePatient } = usePatients()
-  
+  const { loading, patients, error, removePatient, addPatient, editPatient } =
+    usePatients()
+
   useEffect(() => {
     if (patients && patients.length > 0) {
-      const fullyVaccinated = patients.filter((patient) => patient.vaccinationStatus === VACCINE_STATUS_FULLY).length || 0
-      const partiallyVaccinated = patients.filter((patient) => patient.vaccinationStatus === VACCINE_STATUS_PARTIALLY).length || 0
-      const notVaccinated = patients.filter((patient) => patient.vaccinationStatus === VACCINE_STATUS_NOT).length || 0
-      const mumbaiPatients = patients.filter((patient) => patient.site === SITE_MUMBAI).length || 0
-      const banglorePatients = patients.filter((patient) => patient.site === SITE_BANGLORE).length || 0
-      const covishieldPatients = patients.filter((patient) => patient.vaccineName === VACCINE_COVISHIELD).length || 0
-      const covaxinPatients = patients.filter((patient) => patient.vaccineName === VACCINE_COVAXIN).length || 0
-      const malePatients = patients.filter((patient) => patient.gender === GENDER_MALE).length || 0
-      const femalePatients = patients.filter((patient) => patient.gender === GENDER_FEMALE).length || 0
-      const otherPatients = patients.filter((patient) => patient.gender === GENDER_OTHER).length || 0
+      const fullyVaccinated =
+        patients.filter(
+          (patient) => patient.vaccinationStatus === VACCINE_STATUS_FULLY
+        ).length || 0
+      const partiallyVaccinated =
+        patients.filter(
+          (patient) => patient.vaccinationStatus === VACCINE_STATUS_PARTIALLY
+        ).length || 0
+      const notVaccinated =
+        patients.filter((patient) => patient.vaccinationStatus === VACCINE_STATUS_NOT)
+          .length || 0
+      const mumbaiPatients =
+        patients.filter((patient) => patient.site === SITE_MUMBAI).length || 0
+      const banglorePatients =
+        patients.filter((patient) => patient.site === SITE_BANGLORE).length || 0
+      const covishieldPatients =
+        patients.filter((patient) => patient.vaccineName === VACCINE_COVISHIELD)
+          .length || 0
+      const covaxinPatients =
+        patients.filter((patient) => patient.vaccineName === VACCINE_COVAXIN)
+          .length || 0
+      const malePatients =
+        patients.filter((patient) => patient.gender === GENDER_MALE).length || 0
+      const femalePatients =
+        patients.filter((patient) => patient.gender === GENDER_FEMALE).length || 0
+      const otherPatients =
+        patients.filter((patient) => patient.gender === GENDER_OTHER).length || 0
 
       setDashboard({
         totalPatients: patients.length || 0,
@@ -84,9 +102,7 @@ const App: FC = () => {
   }, [patients])
 
   if (loading) {
-    return (
-      <div>Loading...</div>
-    )
+    return <div>Loading...</div>
   }
 
   if (error) {
@@ -94,36 +110,45 @@ const App: FC = () => {
   }
 
   const genderFilter = (patient: IPatient) => patient.gender.includes(filters.gender)
-  const vaccinationStatusFilter = (patient: IPatient) => patient.vaccinationStatus.includes(filters.vaccinationStatus)
-  const vaccineNameFilter = (patient: IPatient) => patient?.vaccineName?.includes(filters.vaccineName)
+  const vaccinationStatusFilter = (patient: IPatient) =>
+    patient.vaccinationStatus.includes(filters.vaccinationStatus)
+  const vaccineNameFilter = (patient: IPatient) =>
+    patient?.vaccineName?.includes(filters.vaccineName)
   const siteFilter = (patient: IPatient) => patient.site.includes(filters.site)
 
-  const FilterBox: FC<IFilterBox> = ({lbl, filterName, filterOptions }) => {
+  const FilterBox: FC<IFilterBox> = ({ lbl, filterName, filterOptions }) => {
     const currentFiltervalue = filters[filterName] || ''
     return (
       <div className={s.filterBox}>
         <div className={s.heading}>
           <div className={s.lbl}>{lbl}</div>
-          {
-            currentFiltervalue !== '' && (
-              <div className={s.clearFilter} onClick={() => {
-                setFilters({...filters, [filterName]: ''})
-              }}>x</div>
-            )
-          }
+          {currentFiltervalue !== '' && (
+            <div
+              className={s.clearFilter}
+              onClick={() => {
+                setFilters({ ...filters, [filterName]: '' })
+              }}
+            >
+              x
+            </div>
+          )}
         </div>
         <div className={s.body}>
-          {
-            filterOptions.map((option, index) => {
-              return (
-                <div key={`filterOption-${index}`} className={cn(s.filterOption)} onClick={() => setFilters({...filters, [filterName]: option})}>{option}</div>
-              )
-            })
-          }
+          {filterOptions.map((option, index) => (
+            <div
+              key={`filterOption-${index}`}
+              className={cn(s.filterOption)}
+              onClick={() => setFilters({ ...filters, [filterName]: option })}
+            >
+              {option}
+            </div>
+          ))}
         </div>
       </div>
     )
   }
+
+  const patientsData = dataFromPaginate.length ? dataFromPaginate : patients
 
   return (
     <BrowserRouter>
@@ -132,8 +157,12 @@ const App: FC = () => {
           <div className={s.headerContainer}>
             <nav className={s.navBar}>
               <div className={s.banner} role={'banner'}>
-                <NavLink className={s.bannerTitle} to="/">
-                  <img className={s.logo} src='./healthcare_icon.svg' alt={'M.G. Memorial Hospital'} />
+                <NavLink className={s.bannerTitle} to='/'>
+                  <img
+                    className={s.logo}
+                    src='./healthcare_icon.svg'
+                    alt={'M.G. Memorial Hospital'}
+                  />
                   <div className={s.navigator} role={'navigation'}>
                     {'M.G. Memorial Hospital'}
                   </div>
@@ -141,10 +170,14 @@ const App: FC = () => {
               </div>
               <div className={s.siteSwitcher}>
                 <span>Mumbai</span>
-                <ToggleSwitch id={'siteSwitcher'} checked={switchToggle} onChange={(checked) => {
-                  setSwitchToggle(checked)
-                  checked ? setSite(SITE_BANGLORE) : setSite(SITE_MUMBAI)
-                }} />
+                <ToggleSwitch
+                  id={'siteSwitcher'}
+                  checked={switchToggle}
+                  onChange={(checked) => {
+                    setSwitchToggle(checked)
+                    checked ? setSite(SITE_BANGLORE) : setSite(SITE_MUMBAI)
+                  }}
+                />
                 <span>Banglore</span>
               </div>
             </nav>
@@ -154,24 +187,49 @@ const App: FC = () => {
         <div className={s.mainContainer}>
           <div className={s.leftPanel}>
             <div className={s.filtersTitle}>Filters</div>
-            <FilterBox lbl={'By Gender'} filterName={'gender'} filterOptions={[GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]} />
-            <FilterBox lbl={'By Vaccine Status'} filterName={'vaccinationStatus'} filterOptions={[VACCINE_STATUS_FULLY, VACCINE_STATUS_PARTIALLY, VACCINE_STATUS_NOT]} />
-            {!filters.vaccinationStatus.includes(VACCINE_STATUS_NOT) && <FilterBox lbl={'By Vaccine Name'} filterName={'vaccineName'} filterOptions={[VACCINE_COVISHIELD, VACCINE_COVAXIN]} />}
-            <FilterBox lbl={'By Site'} filterName={'site'} filterOptions={[SITE_MUMBAI, SITE_BANGLORE]} />
+            <FilterBox
+              lbl={'By Gender'}
+              filterName={'gender'}
+              filterOptions={[GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]}
+            />
+            <FilterBox
+              lbl={'By Vaccine Status'}
+              filterName={'vaccinationStatus'}
+              filterOptions={[
+                VACCINE_STATUS_FULLY,
+                VACCINE_STATUS_PARTIALLY,
+                VACCINE_STATUS_NOT,
+              ]}
+            />
+            {!filters.vaccinationStatus.includes(VACCINE_STATUS_NOT) && (
+              <FilterBox
+                lbl={'By Vaccine Name'}
+                filterName={'vaccineName'}
+                filterOptions={[VACCINE_COVISHIELD, VACCINE_COVAXIN]}
+              />
+            )}
+            <FilterBox
+              lbl={'By Site'}
+              filterName={'site'}
+              filterOptions={[SITE_MUMBAI, SITE_BANGLORE]}
+            />
           </div>
           <div className={s.listing}>
-            {patients && <Listing patients={
-              patients
-              ?.filter(genderFilter)
-              ?.filter(vaccinationStatusFilter)
-              ?.filter(vaccineNameFilter)
-              ?.filter(siteFilter)
-            } removePatient={removePatient} />}
+            {patientsData.length && (
+              <Listing
+                patients={patientsData
+                  ?.filter(genderFilter)
+                  ?.filter(vaccinationStatusFilter)
+                  ?.filter(vaccineNameFilter)
+                  ?.filter(siteFilter)}
+                removePatient={removePatient}
+              />
+            )}
           </div>
         </div>
       </div>
     </BrowserRouter>
-  );
+  )
 }
 
-export default App;
+export default App

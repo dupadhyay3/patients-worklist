@@ -14,19 +14,13 @@ const Paginate: FC<IPaginate> = ({data, setData, itemsPerPage}) => {
       <div className={s.pageNumberContainer}>
         <div className={s.arrowContainer}>
           <div>
-            <span className={s.leftArrow}>
-              {'<'}
-            </span>
+            <span className={s.leftArrow}>{'<'}</span>
           </div>
         </div>
-        <div className={s.pageNumberWrapper}>
-          
-        </div>
+        <div className={s.pageNumberWrapper}></div>
         <div className={s.arrowContainer}>
           <div>
-            <span className={s.rightArrow}>
-              {'>'}
-            </span>
+            <span className={s.rightArrow}>{'>'}</span>
           </div>
         </div>
       </div>

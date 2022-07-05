@@ -1,17 +1,25 @@
-export type TSymptoms = "Headache" | "Cough" | "Fatigue" | "Chest Pain" | "Loss of Smell & Taste" | "Shortness in breathing"
+export type TSymptoms =
+  | 'Headache'
+  | 'Cough'
+  | 'Fatigue'
+  | 'Chest Pain'
+  | 'Loss of Smell & Taste'
+  | 'Shortness in breathing'
 
 export type TPatientId = number | string
 
-export type TGender = "Male" | "Female" | "Other"
+export type TGender = 'Male' | 'Female' | 'Other'
 
-export type TVaccinationStatus =  "Fully vaccinated" | "Partially vaccinated" | "Not vaccinated"
+export type TVaccinationStatus =
+  | 'Fully vaccinated'
+  | 'Partially vaccinated'
+  | 'Not vaccinated'
 
-export type TVaccineName = "Covishield" | "Covaxin" | ""
+export type TVaccineName = 'Covishield' | 'Covaxin' | ''
 
-export type TSite = "Mumbai" | "Banglore"
+export type TSite = 'Mumbai' | 'Banglore'
 
-export interface IPatient {
-  id: TPatientId
+export interface IPatientData {
   firstName: string
   middleName?: string
   lastName: string
@@ -25,4 +33,8 @@ export interface IPatient {
   site: TSite
 }
 
-export type TPatients = [] | Array<IPatient> | null | undefined
+export interface IPatient extends IPatientData {
+  id: TPatientId
+}
+
+export type TPatients = Array<IPatient> | []

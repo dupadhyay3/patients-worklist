@@ -7,7 +7,7 @@
       .navBar {
         @apply relative text-white flex items-center;
         .siteSwitcher {
-          @apply w-full m-1 flex space-x-2 items-center ;
+          @apply w-full m-1 flex space-x-2 items-center;
         }
         .banner {
           .bannerTitle {
@@ -26,7 +26,7 @@
   .mainContainer {
     @apply container mx-auto;
     .leftPanel {
-      @apply float-left w-1/4 max-w-[250px];
+      @apply float-left max-w-[250px] w-1/4;
       .filtersTitle {
         @apply w-full font-bold text-center text-xl;
       }

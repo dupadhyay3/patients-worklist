@@ -11,9 +11,8 @@ interface IDashboardProps {
   dashboard: IDashboard
 }
 
-const Dashboard: FC<IDashboardProps> = ({dashboard}) => {
-
-  const TotalCard: FC<IDashboardCard> = ({lbl, val}) => {
+const Dashboard: FC<IDashboardProps> = ({ dashboard }) => {
+  const TotalCard: FC<IDashboardCard> = ({ lbl, val }) => {
     return (
       <div className={s.totalCard}>
         <div className={s.lbl}>{lbl}</div>
@@ -24,10 +23,7 @@ const Dashboard: FC<IDashboardProps> = ({dashboard}) => {
 
   return (
     <div className={s.dashboardMain}>
-      <TotalCard
-        lbl={'Total Patients'}
-        val={dashboard.totalPatients}
-      />
+      <TotalCard lbl={'Total Patients'} val={dashboard.totalPatients} />
       <TotalCard
         lbl={'Total Fully vaccinated Patients'}
         val={dashboard.fullyVaccinated}
@@ -56,18 +52,9 @@ const Dashboard: FC<IDashboardProps> = ({dashboard}) => {
         lbl={'Total Covaxin vaccinated Patients'}
         val={dashboard.covaxinPatients}
       />
-      <TotalCard
-        lbl={'Total Male Patients'}
-        val={dashboard.malePatients}
-      />
-      <TotalCard
-        lbl={'Total Female Patients'}
-        val={dashboard.femalePatients}
-      />
-      <TotalCard
-        lbl={'Total Other Gender Patients'}
-        val={dashboard.otherPatients}
-      />
+      <TotalCard lbl={'Total Male Patients'} val={dashboard.malePatients} />
+      <TotalCard lbl={'Total Female Patients'} val={dashboard.femalePatients} />
+      <TotalCard lbl={'Total Other Gender Patients'} val={dashboard.otherPatients} />
     </div>
   )
 }

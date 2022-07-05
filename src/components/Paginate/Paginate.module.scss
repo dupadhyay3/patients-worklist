@@ -1,9 +1,9 @@
 .pageNumberContainer {
   @apply w-full p-2 flex justify-center items-center text-xl;
   .pageNumberWrapper {
-    @apply w-full flex overflow-auto max-w-[80%];
+    @apply w-full flex max-w-[80%] overflow-auto;
     .pageNumber {
-      @apply h-6 m-0 text-gray-800 cursor-pointer font-bold ml-0 mr-0 p-3 w-6 flex justify-center items-center text-xs transition-all duration-[0.3s] delay-[0s];
+      @apply h-6 m-0 text-gray-800 cursor-pointer font-bold ml-0 mr-0 p-3 w-6 flex justify-center items-center transition-all duration-[0.3s] delay-[0s] text-xs;
       &:hover {
         @apply transition-all duration-[0.3s] delay-[0s] text-gray-700;
       }
@@ -17,11 +17,11 @@
     & > div span {
       @apply h-full ml-1 mr-1 text-gray-700 cursor-pointer transition-all duration-[0.3s] delay-[0s] text-xs;
       &:hover {
-        @apply transition-all duration-[0.3s] delay-[0s] text-[#819595];
+        @apply transition-all duration-[0.3s] delay-[0s] text-[#819595] font-normal;
       }
     }
     & > span:hover {
-      @apply transition-all duration-[0.3s] delay-[0s] text-[#819595];
+      @apply transition-all duration-[0.3s] delay-[0s] text-[#819595] font-normal;
     }
   }
 }

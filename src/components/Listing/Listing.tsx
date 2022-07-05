@@ -11,12 +11,8 @@ interface IListing {
   removePatient: (id: TPatientId) => void
 }
 
-const Listing: FC<IListing> = ({
-  patients,
-  removePatient
-}) => {
-
-  const PatientCard:FC<IPatientCard> = ({patient, removePatient}) => {
+const Listing: FC<IListing> = ({ patients, removePatient }) => {
+  const PatientCard: FC<IPatientCard> = ({ patient, removePatient }) => {
     return (
       <div key={patient.id} className={'block m-5'}>
         <div>{patient.firstName}</div>
@@ -37,9 +33,13 @@ const Listing: FC<IListing> = ({
 
   return (
     <div className={s.listingWrapper}>
-      {
-        patients?.map((patient, index) => <PatientCard key={`PatientCard-${index}`} patient={patient} removePatient={removePatient} />)
-      }
+      {patients?.map((patient, index) => (
+        <PatientCard
+          key={`PatientCard-${index}`}
+          patient={patient}
+          removePatient={removePatient}
+        />
+      ))}
     </div>
   )
 }
