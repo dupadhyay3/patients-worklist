@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { TPatients, IPatient, TPatientId } from 'types/patient'
 import s from './Listing.module.scss'
+import cn from 'classnames'
 
 interface IPatientCard {
   patient: IPatient
@@ -103,13 +104,19 @@ const Listing: FC<IListing> = ({ patients, removePatient }) => {
 
   return (
     <div className={s.listingWrapper}>
-      {patients?.map((patient, index) => (
-        <PatientCard
-          key={`PatientCard-${index}`}
-          patient={patient}
-          removePatient={removePatient}
-        />
-      ))}
+      {patients.length > 0 ? (
+        patients?.map((patient, index) => (
+          <PatientCard
+            key={`PatientCard-${index}`}
+            patient={patient}
+            removePatient={removePatient}
+          />
+        ))
+      ) : (
+        <div className={cn(s.emptyArea, 'inline-flex w-3/6')}>
+          <img src='empty-img.png' alt='empty image' />
+        </div>
+      )}
     </div>
   )
 }
