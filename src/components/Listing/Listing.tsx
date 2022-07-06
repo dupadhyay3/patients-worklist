@@ -8,12 +8,14 @@ interface IPatientCard {
   removePatient: (id: TPatientId) => void
   cardDropdwnOpenId: number
   setCardDropdwnOpenId: any
+  setOnPopupClose: any
 }
 interface IListing {
   patients: TPatients
   removePatient: (id: TPatientId) => void
   cardDropdwnOpenId: number
   setCardDropdwnOpenId: any
+  setOnPopupClose: any
 }
 
 const Listing: FC<IListing> = ({
@@ -21,12 +23,14 @@ const Listing: FC<IListing> = ({
   removePatient,
   cardDropdwnOpenId,
   setCardDropdwnOpenId,
+  setOnPopupClose,
 }) => {
   const PatientCard: FC<IPatientCard> = ({
     patient,
     removePatient,
     cardDropdwnOpenId,
     setCardDropdwnOpenId,
+    setOnPopupClose,
   }) => {
     return (
       <div
@@ -62,7 +66,10 @@ const Listing: FC<IListing> = ({
           >
             <ul className='py-1' aria-labelledby='dropdownButton'>
               <li>
-                <span className='text-left block py-1 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'>
+                <span
+                  onClick={() => setOnPopupClose(true)}
+                  className='text-left block py-1 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+                >
                   ✎ Edit
                 </span>
               </li>
@@ -115,6 +122,7 @@ const Listing: FC<IListing> = ({
             removePatient={removePatient}
             cardDropdwnOpenId={cardDropdwnOpenId}
             setCardDropdwnOpenId={setCardDropdwnOpenId}
+            setOnPopupClose={setOnPopupClose}
           />
         ))
       ) : (

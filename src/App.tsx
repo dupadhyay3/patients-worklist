@@ -5,7 +5,7 @@ import usePatients from 'hooks/usePatients'
 import { IDashboard } from 'types/dashboard'
 import { IFilters } from 'types/filters'
 import { IPatient, TPatients, TSite } from 'types/patient'
-import { Dashboard, Listing, ToggleSwitch } from 'components'
+import { Dashboard, Listing, ToggleSwitch, Popup } from 'components'
 import s from './App.module.scss'
 
 const SITE_MUMBAI = 'Mumbai'
@@ -30,6 +30,7 @@ const App: FC = () => {
   const [currentSite, setSite] = useState<TSite>(SITE_MUMBAI)
   const [dataFromPaginate, setDataFromPaginate] = useState<TPatients>([])
   const [cardDropdwnOpenId, setCardDropdwnOpenId] = useState<number>(0)
+  const [onPopupClose, setOnPopupClose] = useState<boolean>(false)
 
   const [dashboard, setDashboard] = useState<IDashboard>({
     totalPatients: 0,
@@ -249,12 +250,25 @@ const App: FC = () => {
               <h2 className='float-left relative text-2xl ml-6 pt-1 uppercase font-bold'>
                 PATIENTS LISTING
               </h2>
-              <button className='float-right  relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800'>
+              <button
+                onClick={() => setOnPopupClose(true)}
+                className='float-right  relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800'
+              >
                 <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0'>
                   ➕ ADD PATIENT
                 </span>
               </button>
             </div>
+            <Popup
+              head={'Add New Patient'}
+              onPopupClose={onPopupClose}
+              setOnPopupClose={setOnPopupClose}
+              addressMessage={''}
+              addressError={''}
+              cancelText={''}
+              continueText={''}
+              deletePopupClass={''}
+            ></Popup>
             {patientsData.length && (
               <Listing
                 patients={patientsData
@@ -265,6 +279,7 @@ const App: FC = () => {
                 removePatient={removePatient}
                 cardDropdwnOpenId={cardDropdwnOpenId}
                 setCardDropdwnOpenId={setCardDropdwnOpenId}
+                setOnPopupClose={setOnPopupClose}
               />
             )}
           </div>
