@@ -29,6 +29,7 @@ const App: FC = () => {
   const [switchToggle, setSwitchToggle] = useState<boolean>(false)
   const [currentSite, setSite] = useState<TSite>(SITE_MUMBAI)
   const [dataFromPaginate, setDataFromPaginate] = useState<TPatients>([])
+  const [cardDropdwnOpenId, setCardDropdwnOpenId] = useState<number>(0)
 
   const [dashboard, setDashboard] = useState<IDashboard>({
     totalPatients: 0,
@@ -148,7 +149,7 @@ const App: FC = () => {
                 setFilters({ ...filters, [filterName]: '' })
               }}
             >
-              ⓧ
+              <img src='cancel.png' alt='Cancel icon' />
             </div>
           )}
         </div>
@@ -187,7 +188,7 @@ const App: FC = () => {
                     src='./healthcare_icon.svg'
                     alt={'M.G. Memorial Hospital'}
                   />
-                  <div className={s.navigator} role={'navigation'}>
+                  <div className={cn(s.navigator, 'text-2xl')} role={'navigation'}>
                     {'M.G. Memorial Hospital'}
                   </div>
                 </NavLink>
@@ -213,7 +214,7 @@ const App: FC = () => {
           <div className={s.leftPanel}>
             <div className='m-2 p-3 inline-block w-56 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700'>
               <div className='flex flex-col items-center pb-10'>
-                <div className={s.filtersTitle}>Filters</div>
+                <div className={s.filtersTitle}>FILTERS</div>
                 <FilterBox
                   lbl={'By Gender'}
                   filterName={'gender'}
@@ -246,11 +247,11 @@ const App: FC = () => {
           <div className={s.listing}>
             <div className='float-right block w-full mr-2'>
               <h2 className='float-left relative text-2xl ml-6 pt-1 uppercase font-bold'>
-                Vaccination Listing
+                PATIENTS LISTING
               </h2>
               <button className='float-right  relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800'>
                 <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0'>
-                  ➕ Add Vaccination
+                  ➕ ADD PATIENT
                 </span>
               </button>
             </div>
@@ -262,6 +263,8 @@ const App: FC = () => {
                   ?.filter(vaccineNameFilter)
                   ?.filter(siteFilter)}
                 removePatient={removePatient}
+                cardDropdwnOpenId={cardDropdwnOpenId}
+                setCardDropdwnOpenId={setCardDropdwnOpenId}
               />
             )}
           </div>

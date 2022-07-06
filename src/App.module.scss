@@ -3,13 +3,14 @@
   .header {
     @apply relative w-full z-10 bg-teal-700;
     .headerContainer {
-      @apply w-full py-0 px-8 mx-auto items-center flex flex-wrap;
+      @apply w-full py-0 px-8 mx-auto items-center;
       .navBar {
         @apply relative text-white flex items-center;
         .siteSwitcher {
-          @apply w-full m-1 flex space-x-2 items-center;
+          @apply w-full m-1 space-x-2 text-right block;
         }
         .banner {
+          @apply w-2/4 text-left;
           .bannerTitle {
             @apply flex items-center;
             .logo {
@@ -37,7 +38,7 @@
         @apply w-full font-bold text-center text-xl;
       }
       .filterBox {
-        @apply w-full my-5 text-left;
+        @apply w-full mt-5 text-left;
         .heading {
           @apply w-full flex flex-wrap justify-between left-0;
           background: #fbfbfb;
@@ -52,14 +53,32 @@
             float: right;
             text-align: right;
             cursor: pointer;
+            img {
+              width: 35%;
+              float: right;
+              margin: 4px 0px; 
+            }
           }
         }
         .filterOption {
           cursor: pointer;
-          padding: 2px 10px;
+          padding: 4px 6px;
           color: #9d9d9d;
           &.selected {
             color: black;
+          }
+          &:before {
+            content: "";
+            display: block;
+            background: url('../public/radio-btn-off.png') no-repeat;
+            width: 18px;
+            height: 18px;
+            background-size: 18px !important;
+            float: left;
+            margin: 3px 6px 0 0;
+          }
+          &.selected:before {
+            background: url('../public/radio-btn-on.png') no-repeat;
           }
         }
       }
