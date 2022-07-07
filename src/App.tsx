@@ -6,6 +6,7 @@ import { IDashboard } from 'types/dashboard'
 import { IFilters } from 'types/filters'
 import {
   IPatient,
+  IPatientData,
   TGender,
   TPatients,
   TSite,
@@ -62,6 +63,20 @@ const App: FC = () => {
   const [onPopupClose, setOnPopupClose] = useState<boolean>(false)
   const [popupType, setPopupType] = useState<TPopup>(null)
 
+  const [patient, setPatient] = useState<IPatientData | IPatient | any>({
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    age: '',
+    gender: '',
+    phoneNo: '',
+    vaccinationStatus: '',
+    vaccineName: '',
+    symptoms: [],
+    anyMedicalHistory: '',
+    site: '',
+  })
+
   const [dashboard, setDashboard] = useState<IDashboard>({
     totalPatients: 0,
     fullyVaccinated: 0,
@@ -84,8 +99,15 @@ const App: FC = () => {
     symptoms: [],
   })
 
-  const { loading, patients, error, removePatient, addPatient, editPatient } =
-    usePatients()
+  const {
+    loading,
+    patients,
+    error,
+    removePatient,
+    addPatient,
+    editPatient,
+    isAddEditloading,
+  } = usePatients()
 
   useEffect(() => {
     if (patients && patients.length > 0) {
@@ -160,12 +182,13 @@ const App: FC = () => {
     console.log('Error', error)
   }
 
-  const genderFilter = (patient: IPatient) => patient.gender.includes(filters.gender)
+  const genderFilter = (patient: IPatient) =>
+    patient?.gender?.includes(filters.gender)
   const vaccinationStatusFilter = (patient: IPatient) =>
-    patient.vaccinationStatus.includes(filters.vaccinationStatus)
+    patient?.vaccinationStatus?.includes(filters.vaccinationStatus)
   const vaccineNameFilter = (patient: IPatient) =>
     patient?.vaccineName?.includes(filters.vaccineName)
-  const siteFilter = (patient: IPatient) => patient.site.includes(filters.site)
+  const siteFilter = (patient: IPatient) => patient?.site?.includes(filters.site)
 
   const FilterBox: FC<IFilterBox> = ({ lbl, filterName, filterOptions }) => {
     const currentFiltervalue = filters[filterName] || ''
@@ -201,7 +224,7 @@ const App: FC = () => {
       </div>
     )
   }
-
+  const onSubmit = popupType === 'edit' ? editPatient : addPatient
   const patientsData = dataFromPaginate.length ? dataFromPaginate : patients
 
   return (
@@ -289,31 +312,33 @@ const App: FC = () => {
               </button>
             </div>
             <Popup
-              head={'Add New Patient'}
+              isLoading={isAddEditloading}
               onPopupClose={onPopupClose}
               setOnPopupClose={setOnPopupClose}
-              addPatient={addPatient}
-              editPatient={editPatient}
               genderOptions={GENDER_OPTIONS}
               vaccinationStatusOptions={VACCINE_STATUS_OPTIONS}
               vaccineNameOptions={VACCINE_NAME_OPTIONS}
               symptomsOptions={SYMPTOMS_OPTIONS}
               popUpType={popupType}
-            ></Popup>
-            {patientsData.length && (
-              <Listing
-                patients={patientsData
-                  ?.filter(genderFilter)
-                  ?.filter(vaccinationStatusFilter)
-                  ?.filter(vaccineNameFilter)
-                  ?.filter(siteFilter)}
-                removePatient={removePatient}
-                cardDropdwnOpenId={cardDropdwnOpenId}
-                setCardDropdwnOpenId={setCardDropdwnOpenId}
-                setOnPopupClose={setOnPopupClose}
-                setPopupType={setPopupType}
-              />
-            )}
+              setPopupType={setPopupType}
+              patient={patient}
+              setPatient={setPatient}
+              onSubmit={onSubmit}
+              site={currentSite}
+            />
+            <Listing
+              patients={patientsData
+                ?.filter(genderFilter)
+                ?.filter(vaccinationStatusFilter)
+                ?.filter(vaccineNameFilter)
+                ?.filter(siteFilter)}
+              removePatient={removePatient}
+              cardDropdwnOpenId={cardDropdwnOpenId}
+              setCardDropdwnOpenId={setCardDropdwnOpenId}
+              setOnPopupClose={setOnPopupClose}
+              setPopupType={setPopupType}
+              setPatient={setPatient}
+            />
           </div>
         </div>
       </div>

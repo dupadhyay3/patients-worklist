@@ -1,5 +1,5 @@
-import { FC } from 'react'
-import { TPatients, IPatient, TPatientId } from 'types/patient'
+import { FC, useEffect } from 'react'
+import { TPatients, IPatient, TPatientId, IPatientData } from 'types/patient'
 import s from './Listing.module.scss'
 import cn from 'classnames'
 import { TPopup } from 'types/popup'
@@ -11,6 +11,7 @@ interface IPatientCard {
   setCardDropdwnOpenId: any
   setOnPopupClose: any
   setPopupType: (popupType: TPopup) => void
+  setPatient: (patient?: IPatientData | IPatient | any) => void
 }
 interface IListing {
   patients: TPatients
@@ -19,6 +20,7 @@ interface IListing {
   setCardDropdwnOpenId: any
   setOnPopupClose: any
   setPopupType: (popupType: TPopup) => void
+  setPatient: (patient?: IPatientData | IPatient | any) => void
 }
 
 const Listing: FC<IListing> = ({
@@ -28,7 +30,26 @@ const Listing: FC<IListing> = ({
   setCardDropdwnOpenId,
   setOnPopupClose,
   setPopupType,
+  setPatient,
 }) => {
+  useEffect(() => {
+    return () => {
+      setPatient({
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        age: '',
+        gender: '',
+        phoneNo: '',
+        vaccinationStatus: '',
+        vaccineName: '',
+        symptoms: [],
+        anyMedicalHistory: '',
+        site: '',
+      })
+    }
+  }, [])
+
   const PatientCard: FC<IPatientCard> = ({
     patient,
     removePatient,
@@ -36,6 +57,7 @@ const Listing: FC<IListing> = ({
     setCardDropdwnOpenId,
     setOnPopupClose,
     setPopupType,
+    setPatient,
   }) => {
     return (
       <div key={patient.id} className={s.cardWrapper}>
@@ -70,7 +92,19 @@ const Listing: FC<IListing> = ({
                 <span
                   onClick={() => {
                     setOnPopupClose(true)
+                    setPopupType('view')
+                    setPatient(patient)
+                  }}
+                >
+                  👁 View
+                </span>
+              </li>
+              <li>
+                <span
+                  onClick={() => {
+                    setOnPopupClose(true)
                     setPopupType('edit')
+                    setPatient(patient)
                   }}
                 >
                   ✎ Edit
@@ -97,7 +131,10 @@ const Listing: FC<IListing> = ({
           <span className={s.field}>
             Vaccination Status : {patient.vaccinationStatus}
           </span>
-          <span className={s.field}>Vaccination Name : {patient.vaccineName}</span>
+          {patient.vaccineName && (
+            <span className={s.field}>Vaccination Name : {patient.vaccineName}</span>
+          )}
+          <span className={s.field}>Site : {patient.site}</span>
         </div>
       </div>
     )
@@ -115,6 +152,7 @@ const Listing: FC<IListing> = ({
             setCardDropdwnOpenId={setCardDropdwnOpenId}
             setOnPopupClose={setOnPopupClose}
             setPopupType={setPopupType}
+            setPatient={setPatient}
           />
         ))
       ) : (

@@ -5,6 +5,7 @@ const usePatients = () => {
   const [patients, setPatients] = useState<TPatients>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<any>(true)
+  const [isAddEditloading, setAddEditLoading] = useState<boolean>(false)
 
   useEffect(() => {
     async function getAllPatients() {
@@ -70,6 +71,7 @@ const usePatients = () => {
   }
 
   const addPatient = async (patient: IPatientData) => {
+    setAddEditLoading(true)
     try {
       const requestOptions = {
         method: 'POST',
@@ -83,22 +85,25 @@ const usePatients = () => {
         requestOptions
       )
 
-      if (response.status !== 200) {
+      if (response.status !== 201) {
         throw new Error(`This is an HTTP error: The status is ${response.status}`)
       }
 
       const newPatient: IPatient = await response.json()
-      const updatedPatients: TPatients = [...patients, newPatient]
+      const updatedPatients: TPatients | any = [...patients]
+      updatedPatients.push(newPatient)
       setPatients(updatedPatients)
       setError(null)
     } catch (err: any) {
       setError(err.message)
     } finally {
       setLoading(false)
+      setAddEditLoading(false)
     }
   }
 
   const editPatient = async (patient: IPatient) => {
+    setAddEditLoading(true)
     try {
       const requestOptions = {
         method: 'PUT',
@@ -108,7 +113,7 @@ const usePatients = () => {
         body: JSON.stringify(patient),
       }
       const response = await fetch(
-        `${process.env.REACT_APP_JSON_SERVER_API_URL}patients/`,
+        `${process.env.REACT_APP_JSON_SERVER_API_URL}patients/${patient.id}/`,
         requestOptions
       )
 
@@ -118,8 +123,9 @@ const usePatients = () => {
 
       const editedPatient: IPatient = await response.json()
       const updatedPatients: TPatients = [
-        ...patients.filter((patientData) => patientData.id !== patient.id),
-        editedPatient,
+        ...patients.map((patientData) => {
+          return patientData.id === patient.id ? editedPatient : patientData
+        }),
       ]
       setPatients(updatedPatients)
       setError(null)
@@ -127,10 +133,19 @@ const usePatients = () => {
       setError(err.message)
     } finally {
       setLoading(false)
+      setAddEditLoading(false)
     }
   }
 
-  return { loading, patients, error, removePatient, addPatient, editPatient }
+  return {
+    loading,
+    patients,
+    error,
+    removePatient,
+    addPatient,
+    editPatient,
+    isAddEditloading,
+  }
 }
 
 export default usePatients

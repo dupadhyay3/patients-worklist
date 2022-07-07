@@ -1,43 +1,86 @@
-import classNames from 'classnames'
-import { FC } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import s from './Popup.module.scss'
 import cn from 'classnames'
 import {
   IPatient,
   IPatientData,
   TGender,
+  TSite,
   TSymptoms,
   TVaccinationStatus,
   TVaccineName,
 } from 'types/patient'
-import { TPopup } from 'types/popup'
+import { IBtnPopupLblTitle, TPopup } from 'types/popup'
 
 interface IPopup {
-  isLoading?: boolean
-  head: string
+  isLoading: boolean
   onPopupClose: boolean
   setOnPopupClose: any
-  addPatient: (patient: IPatientData) => void
-  editPatient: (patient: IPatient) => void
   genderOptions: Array<TGender> | []
   vaccinationStatusOptions: Array<TVaccinationStatus> | []
   vaccineNameOptions: Array<TVaccineName> | []
   symptomsOptions: Array<TSymptoms> | []
   popUpType: TPopup
+  setPopupType: (popupType: TPopup) => void
+  patient: IPatientData | IPatient | undefined
+  setPatient: (patient?: IPatientData | IPatient | any) => void
+  onSubmit: (patient: IPatientData | IPatient | any) => Promise<void>
+  site: TSite
 }
 
 const Popup: FC<IPopup> = ({
-  isLoading,
-  head,
+  isLoading = false,
   onPopupClose,
   setOnPopupClose,
-  addPatient,
-  editPatient,
   genderOptions,
   vaccinationStatusOptions,
   vaccineNameOptions,
   symptomsOptions,
+  popUpType,
+  setPopupType,
+  patient,
+  setPatient,
+  onSubmit,
+  site,
 }) => {
+  const formEl = useRef(null)
+  useEffect(() => {
+    setPatient({ ...patient, site: site })
+    return () => {
+      setPatient({
+        firstName: '',
+        middleName: '',
+        lastName: '',
+        age: '',
+        gender: '',
+        phoneNo: '',
+        vaccinationStatus: '',
+        vaccineName: '',
+        symptoms: [],
+        anyMedicalHistory: '',
+        site: '',
+      })
+    }
+  }, [])
+
+  const btnActionLbl: IBtnPopupLblTitle = {
+    add: {
+      title: 'Add Patient Details',
+      lbl: 'Submit',
+    },
+    edit: {
+      title: 'Edit Patient Details',
+      lbl: 'Update',
+    },
+    view: {
+      title: 'Patient Details',
+      lbl: '',
+    },
+  }
+
+  const readOnlyMode = popUpType === 'view'
+  const popupTitle = popUpType && btnActionLbl[popUpType].title
+  const btnLbl = popUpType && btnActionLbl[popUpType].lbl
   const btnText = isLoading ? (
     <span>
       <svg
@@ -59,7 +102,7 @@ const Popup: FC<IPopup> = ({
       Loading...
     </span>
   ) : (
-    <span>btnLbl</span>
+    <span>{btnLbl}</span>
   )
 
   return (
@@ -101,9 +144,9 @@ const Popup: FC<IPopup> = ({
             </button>
             <div className='px-6 py-6 lg:px-8'>
               <h3 className='mb-4 text-xl font-medium text-gray-900 dark:text-white'>
-                {head}
+                {popupTitle}
               </h3>
-              <form className='space-y-6' action='#'>
+              <form className='space-y-6' action='#' id='popupForm' ref={formEl}>
                 <div className='w-full'>
                   <label
                     htmlFor='firstName'
@@ -120,6 +163,11 @@ const Popup: FC<IPopup> = ({
                         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
                         placeholder='Enter First Name'
                         required
+                        disabled={readOnlyMode}
+                        onChange={(e) => {
+                          setPatient({ ...patient, firstName: e.target.value })
+                        }}
+                        value={patient?.firstName}
                       />
                     </div>
                     <div className='w-1/3 px-1 column'>
@@ -130,6 +178,11 @@ const Popup: FC<IPopup> = ({
                         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
                         placeholder='Enter Middle Name'
                         required
+                        disabled={readOnlyMode}
+                        onChange={(e) => {
+                          setPatient({ ...patient, middleName: e.target.value })
+                        }}
+                        value={patient?.middleName}
                       />
                     </div>
                     <div className='w-1/3 px-1 column'>
@@ -140,6 +193,11 @@ const Popup: FC<IPopup> = ({
                         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
                         placeholder='Enter Last Name'
                         required
+                        disabled={readOnlyMode}
+                        onChange={(e) => {
+                          setPatient({ ...patient, lastName: e.target.value })
+                        }}
+                        value={patient?.lastName}
                       />
                     </div>
                   </div>
@@ -161,6 +219,11 @@ const Popup: FC<IPopup> = ({
                         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
                         placeholder='Enter Age'
                         required
+                        disabled={readOnlyMode}
+                        onChange={(e) => {
+                          setPatient({ ...patient, age: e.target.value })
+                        }}
+                        value={patient?.age}
                       />
                     </div>
                     <div className='w-1/3 px-1 column'>
@@ -173,9 +236,16 @@ const Popup: FC<IPopup> = ({
                       <select
                         name='gender'
                         id='gender'
+                        disabled={readOnlyMode}
+                        onChange={(e) => {
+                          setPatient({ ...patient, gender: e.target.value })
+                        }}
+                        value={patient?.gender}
                         className='bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                       >
-                        <option selected>Choose an option</option>
+                        <option selected value={''}>
+                          Choose an option
+                        </option>
                         {genderOptions.map((option, index) => {
                           return (
                             <option key={`gender-${index}`} value={option}>
@@ -199,6 +269,11 @@ const Popup: FC<IPopup> = ({
                         className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white'
                         placeholder='Enter Phone Number'
                         required
+                        disabled={readOnlyMode}
+                        onChange={(e) => {
+                          setPatient({ ...patient, phoneNo: e.target.value })
+                        }}
+                        value={patient?.phoneNo}
                       />
                     </div>
                   </div>
@@ -216,9 +291,19 @@ const Popup: FC<IPopup> = ({
                       <select
                         name='vaccinationStatus'
                         id='vaccinationStatus'
+                        disabled={readOnlyMode}
+                        onChange={(e) => {
+                          setPatient({
+                            ...patient,
+                            vaccinationStatus: e.target.value,
+                          })
+                        }}
+                        value={patient?.vaccinationStatus}
                         className='bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                       >
-                        <option selected>Choose an option</option>
+                        <option selected value={''}>
+                          Choose an option
+                        </option>
                         {vaccinationStatusOptions.map((option, index) => {
                           return (
                             <option key={`vaccinationStatus-${index}`} value={option}>
@@ -238,9 +323,19 @@ const Popup: FC<IPopup> = ({
                       <select
                         name='vaccineName'
                         id='vaccineName'
+                        disabled={readOnlyMode}
+                        onChange={(e) => {
+                          setPatient({
+                            ...patient,
+                            vaccineName: e.target.value,
+                          })
+                        }}
+                        value={patient?.vaccineName}
                         className='bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                       >
-                        <option selected>Choose an option</option>
+                        <option selected value={''}>
+                          Choose an option
+                        </option>
                         {vaccineNameOptions.map((option, index) => {
                           return (
                             <option key={`vaccineName-${index}`} value={option}>
@@ -265,10 +360,24 @@ const Popup: FC<IPopup> = ({
                       <select
                         name='symptoms'
                         id='symptoms'
+                        disabled={readOnlyMode}
                         className='bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 h-36 overflow-auto'
                         multiple={true}
+                        value={patient?.symptoms}
+                        onChange={(e) => {
+                          const symptomsValue = Array.from(
+                            e.target.selectedOptions,
+                            (option) => option.value
+                          )
+                          setPatient({
+                            ...patient,
+                            symptoms: symptomsValue,
+                          })
+                        }}
                       >
-                        <option selected>Choose an option</option>
+                        <option selected value={''}>
+                          Choose an option
+                        </option>
                         {symptomsOptions.map((option, index) => {
                           return (
                             <option key={`vaccineName-${index}`} value={option}>
@@ -296,19 +405,49 @@ const Popup: FC<IPopup> = ({
                         aria-rowspan={8}
                         className='block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 resize-none h-36'
                         placeholder='Your message...'
+                        disabled={readOnlyMode}
+                        value={patient?.anyMedicalHistory}
+                        onChange={(e) => {
+                          setPatient({
+                            ...patient,
+                            anyMedicalHistory: e.target.value,
+                          })
+                        }}
                       ></textarea>
                     </div>
                   </div>
                 </div>
 
-                <div className='w-full px-1'>
-                  <button
-                    type='submit'
-                    className='w-full text-white bg-gradient-to-r from-purple-500 via-blue-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'
-                  >
-                    {btnText}
-                  </button>
-                </div>
+                {!readOnlyMode && (
+                  <div className='w-full px-1'>
+                    <button
+                      onClick={async () => {
+                        await onSubmit(patient)
+                        if (!isLoading) {
+                          setPatient({
+                            firstName: '',
+                            middleName: '',
+                            lastName: '',
+                            age: '',
+                            gender: '',
+                            phoneNo: '',
+                            vaccinationStatus: '',
+                            vaccineName: '',
+                            symptoms: [],
+                            anyMedicalHistory: '',
+                            site: '',
+                          })
+                          await setOnPopupClose(false)
+                          await setPopupType(null)
+                        }
+                      }}
+                      type='button'
+                      className='w-full text-white bg-gradient-to-r from-purple-500 via-blue-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2'
+                    >
+                      {btnText}
+                    </button>
+                  </div>
+                )}
               </form>
             </div>
           </div>
