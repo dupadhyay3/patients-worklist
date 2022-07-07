@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { TPatients, IPatient, TPatientId } from 'types/patient'
 import s from './Listing.module.scss'
 import cn from 'classnames'
+import { TPopup } from 'types/popup'
 
 interface IPatientCard {
   patient: IPatient
@@ -9,6 +10,7 @@ interface IPatientCard {
   cardDropdwnOpenId: number
   setCardDropdwnOpenId: any
   setOnPopupClose: any
+  setPopupType: (popupType: TPopup) => void
 }
 interface IListing {
   patients: TPatients
@@ -16,6 +18,7 @@ interface IListing {
   cardDropdwnOpenId: number
   setCardDropdwnOpenId: any
   setOnPopupClose: any
+  setPopupType: (popupType: TPopup) => void
 }
 
 const Listing: FC<IListing> = ({
@@ -24,6 +27,7 @@ const Listing: FC<IListing> = ({
   cardDropdwnOpenId,
   setCardDropdwnOpenId,
   setOnPopupClose,
+  setPopupType,
 }) => {
   const PatientCard: FC<IPatientCard> = ({
     patient,
@@ -31,6 +35,7 @@ const Listing: FC<IListing> = ({
     cardDropdwnOpenId,
     setCardDropdwnOpenId,
     setOnPopupClose,
+    setPopupType,
   }) => {
     return (
       <div key={patient.id} className={s.cardWrapper}>
@@ -62,7 +67,14 @@ const Listing: FC<IListing> = ({
           >
             <ul className='py-1' aria-labelledby='dropdownButton'>
               <li>
-                <span onClick={() => setOnPopupClose(true)}>✎ Edit</span>
+                <span
+                  onClick={() => {
+                    setOnPopupClose(true)
+                    setPopupType('edit')
+                  }}
+                >
+                  ✎ Edit
+                </span>
               </li>
               <li>
                 <span
@@ -102,6 +114,7 @@ const Listing: FC<IListing> = ({
             cardDropdwnOpenId={cardDropdwnOpenId}
             setCardDropdwnOpenId={setCardDropdwnOpenId}
             setOnPopupClose={setOnPopupClose}
+            setPopupType={setPopupType}
           />
         ))
       ) : (

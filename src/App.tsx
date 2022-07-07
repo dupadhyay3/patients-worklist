@@ -15,6 +15,7 @@ import {
 } from 'types/patient'
 import { Dashboard, Listing, ToggleSwitch, Popup } from 'components'
 import s from './App.module.scss'
+import { TPopup } from 'types/popup'
 
 const SITE_MUMBAI = 'Mumbai'
 const SITE_BANGLORE = 'Banglore'
@@ -59,6 +60,7 @@ const App: FC = () => {
   const [dataFromPaginate, setDataFromPaginate] = useState<TPatients>([])
   const [cardDropdwnOpenId, setCardDropdwnOpenId] = useState<number>(0)
   const [onPopupClose, setOnPopupClose] = useState<boolean>(false)
+  const [popupType, setPopupType] = useState<TPopup>(null)
 
   const [dashboard, setDashboard] = useState<IDashboard>({
     totalPatients: 0,
@@ -275,7 +277,10 @@ const App: FC = () => {
                 PATIENTS LISTING
               </h2>
               <button
-                onClick={() => setOnPopupClose(true)}
+                onClick={() => {
+                  setOnPopupClose(true)
+                  setPopupType('add')
+                }}
                 className='float-right  relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800'
               >
                 <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0'>
@@ -293,6 +298,7 @@ const App: FC = () => {
               vaccinationStatusOptions={VACCINE_STATUS_OPTIONS}
               vaccineNameOptions={VACCINE_NAME_OPTIONS}
               symptomsOptions={SYMPTOMS_OPTIONS}
+              popUpType={popupType}
             ></Popup>
             {patientsData.length && (
               <Listing
@@ -305,6 +311,7 @@ const App: FC = () => {
                 cardDropdwnOpenId={cardDropdwnOpenId}
                 setCardDropdwnOpenId={setCardDropdwnOpenId}
                 setOnPopupClose={setOnPopupClose}
+                setPopupType={setPopupType}
               />
             )}
           </div>

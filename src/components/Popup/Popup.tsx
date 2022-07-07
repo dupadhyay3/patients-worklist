@@ -10,8 +10,7 @@ import {
   TVaccinationStatus,
   TVaccineName,
 } from 'types/patient'
-
-type TPopup = 'add' | 'edit' | 'view'
+import { TPopup } from 'types/popup'
 
 interface IPopup {
   isLoading?: boolean
