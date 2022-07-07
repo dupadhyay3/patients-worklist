@@ -128,13 +128,14 @@ const Listing: FC<IListing> = ({
           <span className={s.field}>Gender : {patient.gender}</span>
           <span className={s.field}>Age : {patient.age}</span>
           <span className={s.field}>Phone No : {patient.phoneNo}</span>
+          <span className={s.field}>Site : {patient.site}</span>
           <span className={s.field}>
             Vaccination Status : {patient.vaccinationStatus}
           </span>
-          {patient.vaccineName && (
-            <span className={s.field}>Vaccination Name : {patient.vaccineName}</span>
-          )}
-          <span className={s.field}>Site : {patient.site}</span>
+          <span className={s.field}>
+            {patient.vaccineName && `Vaccination Name : ${patient.vaccineName}`}
+            &nbsp;
+          </span>
         </div>
       </div>
     )

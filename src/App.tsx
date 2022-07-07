@@ -215,7 +215,11 @@ const App: FC = () => {
                 filters[filterName] == option && s.selected,
                 s.filterOption
               )}
-              onClick={() => setFilters({ ...filters, [filterName]: option })}
+              onClick={() => {
+                option === VACCINE_STATUS_NOT
+                  ? setFilters({ ...filters, [filterName]: option, vaccineName: '' })
+                  : setFilters({ ...filters, [filterName]: option })
+              }}
             >
               {option}
             </div>
