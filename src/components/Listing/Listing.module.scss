@@ -1,14 +1,35 @@
 .listingWrapper {
   @apply block;
-  .dropdownList {
-    @apply absolute;
-    right: 17px;
-    top: 55px;
-    ul > li > span {
-      cursor: pointer;
-    } 
+  
+  .cardWrapper {
+    @apply inline-block max-w-sm m-2 bg-white border border-gray-200 rounded-lg shadow-md w-80 dark:bg-gray-800 dark:border-gray-700;
+    .menu {
+      @apply relative justify-end px-4 pt-4;
+      .btn {
+        @apply float-right hidden sm:inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5;
+      }
+      .dropdownList {
+        @apply absolute right-4 top-14 z-10 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700;
+        ul > li > span {
+          @apply block px-4 py-1 text-sm text-left text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white;
+          cursor: pointer;
+        } 
+      }
+    }
+    .cardBody {
+      @apply flex flex-col items-center w-full pb-10;
+      .name {
+        @apply mb-1 text-xl font-medium text-gray-900 dark:text-white;
+      }
+      .field {
+        @apply text-sm text-gray-500 dark:text-gray-400;
+      }
+    }
   }
 }
-.emptyArea img {
-  filter: hue-rotate(70deg);
+.emptyArea{
+  @apply inline-flex w-3/6;
+  img {
+    filter: hue-rotate(70deg);
+  }
 }

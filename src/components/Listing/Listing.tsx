@@ -33,15 +33,12 @@ const Listing: FC<IListing> = ({
     setOnPopupClose,
   }) => {
     return (
-      <div
-        key={patient.id}
-        className='m-2 inline-block w-80 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700'
-      >
-        <div className='relative justify-end px-4 pt-4'>
+      <div key={patient.id} className={s.cardWrapper}>
+        <div className={s.menu}>
           <button
             id='dropdownButton'
             data-dropdown-toggle='dropdown'
-            className='float-right hidden sm:inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5'
+            className={s.btn}
             type='button'
             onClick={() =>
               setCardDropdwnOpenId(cardDropdwnOpenId == patient.id ? 0 : patient.id)
@@ -60,23 +57,17 @@ const Listing: FC<IListing> = ({
             id={`dropdown-${patient.id}`}
             className={cn(
               s.dropdownList,
-              cardDropdwnOpenId != patient.id && 'hidden',
-              'z-10 w-15 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700'
+              cardDropdwnOpenId != patient.id && 'hidden'
             )}
           >
             <ul className='py-1' aria-labelledby='dropdownButton'>
               <li>
-                <span
-                  onClick={() => setOnPopupClose(true)}
-                  className='text-left block py-1 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
-                >
-                  ✎ Edit
-                </span>
+                <span onClick={() => setOnPopupClose(true)}>✎ Edit</span>
               </li>
               <li>
                 <span
                   onClick={() => removePatient(patient.id)}
-                  className='text-left block py-1 px-4 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white'
+                  className={'!text-red-600'}
                 >
                   ⓧ Delete
                 </span>
@@ -84,29 +75,17 @@ const Listing: FC<IListing> = ({
             </ul>
           </div>
         </div>
-        <div className='w-full flex flex-col items-center pb-10'>
-          <h5 className='mb-1 text-xl font-medium text-gray-900 dark:text-white'>
+        <div className={s.cardBody}>
+          <h5 className={s.name}>
             {patient.firstName} {patient.middleName} {patient.lastName}
           </h5>
-          <span className='text-sm text-gray-500 dark:text-gray-400'>
-            Gender : {patient.gender}
-          </span>
-          <span className='text-sm text-gray-500 dark:text-gray-400'>
-            Age : {patient.age}
-          </span>
-          <span className='text-sm text-gray-500 dark:text-gray-400'>
-            Phone No : {patient.phoneNo}
-          </span>
-          <span className='text-sm text-gray-500 dark:text-gray-400'>
+          <span className={s.field}>Gender : {patient.gender}</span>
+          <span className={s.field}>Age : {patient.age}</span>
+          <span className={s.field}>Phone No : {patient.phoneNo}</span>
+          <span className={s.field}>
             Vaccination Status : {patient.vaccinationStatus}
           </span>
-          <span className='text-sm text-gray-500 dark:text-gray-400'>
-            Vaccination Name : {patient.vaccineName}
-          </span>
-          {/* <div className='flex mt-4 space-x-3 lg:mt-6'>
-              <a href='#' className='inline-flex items-center py-2 px-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'>Add friend</a>
-              <a href='#' className='inline-flex items-center py-2 px-4 text-sm font-medium text-center text-gray-900 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700'>Message</a>
-          </div> */}
+          <span className={s.field}>Vaccination Name : {patient.vaccineName}</span>
         </div>
       </div>
     )
@@ -126,7 +105,7 @@ const Listing: FC<IListing> = ({
           />
         ))
       ) : (
-        <div className={cn(s.emptyArea, 'inline-flex w-3/6')}>
+        <div className={s.emptyArea}>
           <img src='empty-img.png' alt='empty image' />
         </div>
       )}

@@ -4,7 +4,15 @@ import cn from 'classnames'
 import usePatients from 'hooks/usePatients'
 import { IDashboard } from 'types/dashboard'
 import { IFilters } from 'types/filters'
-import { IPatient, TPatients, TSite } from 'types/patient'
+import {
+  IPatient,
+  TGender,
+  TPatients,
+  TSite,
+  TSymptoms,
+  TVaccinationStatus,
+  TVaccineName,
+} from 'types/patient'
 import { Dashboard, Listing, ToggleSwitch, Popup } from 'components'
 import s from './App.module.scss'
 
@@ -18,6 +26,26 @@ const VACCINE_COVAXIN = 'Covaxin'
 const GENDER_MALE = 'Male'
 const GENDER_FEMALE = 'Female'
 const GENDER_OTHER = 'Other'
+
+const GENDER_OPTIONS: Array<TGender> = [GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]
+const VACCINE_STATUS_OPTIONS: Array<TVaccinationStatus> = [
+  VACCINE_STATUS_FULLY,
+  VACCINE_STATUS_PARTIALLY,
+  VACCINE_STATUS_NOT,
+]
+const VACCINE_NAME_OPTIONS: Array<TVaccineName> = [
+  VACCINE_COVISHIELD,
+  VACCINE_COVAXIN,
+]
+const SYMPTOMS_OPTIONS: Array<TSymptoms> = [
+  'Headache',
+  'Cough',
+  'Fatigue',
+  'Chest Pain',
+  'Loss of Smell & Taste',
+  'Shortness in breathing',
+]
+const SITE_OPTIONS: Array<TSite> = [SITE_MUMBAI, SITE_BANGLORE]
 
 interface IFilterBox {
   lbl: string
@@ -213,41 +241,37 @@ const App: FC = () => {
         <span className={s.lineBrek}></span>
         <div className={s.mainContainer}>
           <div className={s.leftPanel}>
-            <div className='m-2 p-3 inline-block w-56 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700'>
+            <div className='inline-block w-56 max-w-sm p-3 m-2 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700'>
               <div className='flex flex-col items-center pb-10'>
                 <div className={s.filtersTitle}>FILTERS</div>
                 <FilterBox
                   lbl={'By Gender'}
                   filterName={'gender'}
-                  filterOptions={[GENDER_MALE, GENDER_FEMALE, GENDER_OTHER]}
+                  filterOptions={GENDER_OPTIONS}
                 />
                 <FilterBox
                   lbl={'By Vaccine Status'}
                   filterName={'vaccinationStatus'}
-                  filterOptions={[
-                    VACCINE_STATUS_FULLY,
-                    VACCINE_STATUS_PARTIALLY,
-                    VACCINE_STATUS_NOT,
-                  ]}
+                  filterOptions={VACCINE_STATUS_OPTIONS}
                 />
                 {!filters.vaccinationStatus.includes(VACCINE_STATUS_NOT) && (
                   <FilterBox
                     lbl={'By Vaccine Name'}
                     filterName={'vaccineName'}
-                    filterOptions={[VACCINE_COVISHIELD, VACCINE_COVAXIN]}
+                    filterOptions={VACCINE_NAME_OPTIONS}
                   />
                 )}
                 <FilterBox
                   lbl={'By Site'}
                   filterName={'site'}
-                  filterOptions={[SITE_MUMBAI, SITE_BANGLORE]}
+                  filterOptions={SITE_OPTIONS}
                 />
               </div>
             </div>
           </div>
           <div className={s.listing}>
-            <div className='float-right block w-full mr-2'>
-              <h2 className='float-left relative text-2xl ml-6 pt-1 uppercase font-bold'>
+            <div className='block float-right w-full mr-2'>
+              <h2 className='relative float-left pt-1 ml-6 text-2xl font-bold uppercase'>
                 PATIENTS LISTING
               </h2>
               <button
@@ -263,11 +287,12 @@ const App: FC = () => {
               head={'Add New Patient'}
               onPopupClose={onPopupClose}
               setOnPopupClose={setOnPopupClose}
-              addressMessage={''}
-              addressError={''}
-              cancelText={''}
-              continueText={''}
-              deletePopupClass={''}
+              addPatient={addPatient}
+              editPatient={editPatient}
+              genderOptions={GENDER_OPTIONS}
+              vaccinationStatusOptions={VACCINE_STATUS_OPTIONS}
+              vaccineNameOptions={VACCINE_NAME_OPTIONS}
+              symptomsOptions={SYMPTOMS_OPTIONS}
             ></Popup>
             {patientsData.length && (
               <Listing

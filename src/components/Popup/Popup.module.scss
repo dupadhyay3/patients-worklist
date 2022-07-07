@@ -2,7 +2,6 @@
   box-shadow: 0px 0px 0 1000px #00000075;
 }
 .popupContnt {
-  top: 50%;
-  left: 50%;
+  @apply top-2/4 left-2/4;
   transform: translate(-50%, -50%);
 }
